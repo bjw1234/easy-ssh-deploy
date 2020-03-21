@@ -1,10 +1,7 @@
-const fs = require('fs');
-const path = require('path');
 const util = require('util');
 const scpClient = require('scp2');
 const SSH = require('simple-ssh');
 const moment = require('moment');
-const readFile = util.promisify(fs.readFile);
 const exec = util.promisify(require('child_process').exec);
 
 // 默认配置
@@ -63,15 +60,12 @@ function mergeConfig(userConfig, defaultConfig) {
   return result;
 }
 
-async function main() {
+async function main(config) {
   try {
-    const p = path.resolve(__dirname, '.deploy.json');
-    const res = await readFile(p, 'utf8');
     const deployConfig = mergeConfig(
-      JSON.parse(res),
+      config,
       defaultConf,
-    )
-    console.log(deployConfig)
+    );
 
     // 创建ssh客户端
     const sshClient = new SSH({
@@ -81,7 +75,7 @@ async function main() {
     });
 
     console.log('[1/4] 正在编译代码...');
-    // await exec(`npm run ${deployConfig.buildCommand}`);
+    await exec(`npm run ${deployConfig.buildCommand}`);
     console.log('[2/4] 打包静态资源生成压缩包中...');
     await exec(`zip -r ${deployConfig.localStaticFileName}.zip ./${deployConfig.localStaticFileName}`);
     console.log('[3/4] 正在上传压缩包...');
@@ -114,4 +108,4 @@ async function main() {
   }
 }
 
-main();
+module.exports = main;
