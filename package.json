@@ -1,0 +1,16 @@
+{
+  "name": "easy-ssh-deploy",
+  "version": "1.0.0",
+  "description": "自动化打包发布工具",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Jevon.bai",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "scp2": "^0.5.0",
+    "simple-ssh": "^1.0.0"
+  }
+}
