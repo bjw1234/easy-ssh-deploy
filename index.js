@@ -90,6 +90,7 @@ async function main(config) {
     sshClient.exec(
       `
         cd ${deployConfig.deployPath} \n
+        rm -rf ${deployConfig.localStaticFileName} \n
         unzip -o ${deployConfig.localStaticFileName}.zip \n
         mv ${deployConfig.serverStaticFileName} ${deployConfig.serverStaticFileName}-${moment().format('YYYYMMDD')} \n
         mv ${deployConfig.localStaticFileName} ${deployConfig.serverStaticFileName} \n
