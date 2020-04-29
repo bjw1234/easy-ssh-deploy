@@ -74,8 +74,8 @@ async function main(config) {
       pass: deployConfig.sshConfig.password,
     });
 
-    // console.log('[1/4] 正在编译代码...');
-    // await exec(`npm run ${deployConfig.buildCommand}`);
+    console.log('[1/4] 正在编译代码...');
+    await exec(`npm run ${deployConfig.buildCommand}`);
     console.log('[2/4] 打包静态资源生成压缩包中...');
     await exec(`zip -r ${deployConfig.localStaticFileName}.zip ./${deployConfig.localStaticFileName}`);
     console.log('[3/4] 正在上传压缩包...');
