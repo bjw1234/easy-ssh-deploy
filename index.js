@@ -74,8 +74,8 @@ async function main(config) {
       pass: deployConfig.sshConfig.password,
     });
 
-    console.log('[1/4] 正在编译代码...');
-    await exec(`npm run ${deployConfig.buildCommand}`);
+    // console.log('[1/4] 正在编译代码...');
+    // await exec(`npm run ${deployConfig.buildCommand}`);
     console.log('[2/4] 打包静态资源生成压缩包中...');
     await exec(`zip -r ${deployConfig.localStaticFileName}.zip ./${deployConfig.localStaticFileName}`);
     console.log('[3/4] 正在上传压缩包...');
@@ -91,12 +91,14 @@ async function main(config) {
       `
         cd ${deployConfig.deployPath} \n
         rm -rf ${deployConfig.localStaticFileName} \n
+        rm -rf ${deployConfig.serverStaticFileName}-${moment().format('YYYYMMDD')} \n
         unzip -o ${deployConfig.localStaticFileName}.zip \n
         mv ${deployConfig.serverStaticFileName} ${deployConfig.serverStaticFileName}-${moment().format('YYYYMMDD')} \n
         mv ${deployConfig.localStaticFileName} ${deployConfig.serverStaticFileName} \n
       `
     )
-      .on('error', () => {
+      .on('error', (err) => {
+        console.log(err);
         sshClient.end();
       })
       .start();
